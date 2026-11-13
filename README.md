@@ -2,7 +2,7 @@
 
 An end-to-end decision system that predicts which telecom customers are likely to churn, recommends the most cost-effective retention offer for each, and quantifies the revenue it protects.
 
-> **Status:** 🚧 In progress. Exploratory analysis complete; modeling underway. See [Roadmap](#roadmap).
+> **Status:** In progress. Exploratory analysis and data preparation complete; modeling next. See [Roadmap](#roadmap).
 
 ---
 
@@ -41,6 +41,23 @@ Customers are targeted only when the expected value is positive, and contacted i
 | Customers past 4 years | **10%** churn | Low priority for retention spend |
 
 Full analysis: [`notebooks/01_explore_data.ipynb`](notebooks/01_explore_data.ipynb)
+
+---
+
+## Data Preparation
+
+| Step | Detail |
+|---|---|
+| Cleaning | Blank `TotalCharges` for new customers (tenure 0) set to 0 |
+| Target | `Churn` encoded as 1 (churned) / 0 (stayed) |
+| Split | 80% train (5,634) / 20% test (1,409), stratified to keep the 26.5% churn rate |
+| Categorical features | 15 text columns one-hot encoded into 36 binary columns |
+| Numeric features | 4 columns standardized (mean 0, standard deviation 1) |
+| Leakage prevention | All transformations fit on the training set only |
+
+Result: **40 numeric features**, ready for modeling.
+
+Full process: [`notebooks/02_prepare_data.ipynb`](notebooks/02_prepare_data.ipynb)
 
 ---
 
@@ -106,9 +123,10 @@ data/WA_Fn-UseC_-Telco-Customer-Churn.csv
 
 ```
 telecom-churn-prediction/
-├── data/                  # Raw data (not committed)
+├── data/                       # Raw data (not committed)
 ├── notebooks/
-│   └── 01_explore_data.ipynb
+│   ├── 01_explore_data.ipynb   # Exploratory analysis
+│   └── 02_prepare_data.ipynb   # Cleaning, encoding, scaling, train/test split
 ├── requirements.txt
 └── README.md
 ```
@@ -133,7 +151,8 @@ pip install -r requirements.txt
 - [x] Project setup and version control
 - [x] Exploratory data analysis
 - [x] Data quality fixes (`TotalCharges`)
-- [x] Data preparation and feature pipeline
+- [x] Data preparation (encoding, scaling, stratified train/test split)
+- [ ] Reusable preprocessing pipeline (scikit-learn `Pipeline`)
 - [ ] Baseline model (logistic regression)
 - [ ] Advanced model (LightGBM) with tuning and calibration
 - [ ] Model explainability (SHAP)
@@ -147,5 +166,5 @@ pip install -r requirements.txt
 
 ## Tech Stack
 
-**Current:** Python · pandas · matplotlib · Jupyter
-**Planned:** scikit-learn · LightGBM · SHAP · MLflow · FastAPI · Streamlit · Docker
+**Current:** Python · pandas · NumPy · scikit-learn · matplotlib · Jupyter
+**Planned:** LightGBM · SHAP · MLflow · FastAPI · Streamlit · Docker
