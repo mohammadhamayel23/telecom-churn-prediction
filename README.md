@@ -133,7 +133,7 @@ pip install -r requirements.txt
 - [x] Project setup and version control
 - [x] Exploratory data analysis
 - [x] Data quality fixes (`TotalCharges`)
-- [ ] Data preparation and feature pipeline
+- [x] Data preparation and feature pipeline
 - [ ] Baseline model (logistic regression)
 - [ ] Advanced model (LightGBM) with tuning and calibration
 - [ ] Model explainability (SHAP)
